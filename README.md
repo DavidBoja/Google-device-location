@@ -4,17 +4,17 @@ Python 3 script that uses Selenium to query Google's "Find my phone" website to 
 
 ### Usage
 ```
-python3 get_mobile_location.py GMAIL GMAIL_PASSWORD DEVICE_NAME --LOCALLY
+python3 get_mobile_location.py GMAIL GMAIL_PASSWORD DEVICE_NAME --HEROKU
 ```
 where:
-1. GMAIL = your gmail address
-2. GMAIL_PASSWORD = your gmail address password
-3. DEVICE_NAME = the device that has the google account assigned to it. The name must be precise as on the Google's "Find my phone" site
-4. --LOCALLY = Optional flag. If True, the script opens the google 
+1. GMAIL = your gmail address (str)
+2. GMAIL_PASSWORD = your gmail address password (str)
+3. DEVICE_NAME = the device that has the google account assigned to it. The name must be precise as on the Google's "Find my phone" site (str)
+4. --HEROKU = Optional flag. If added, the script runs windowlessly. More info below.
 
 or rather:
 ```
-latitude, longitude = get_location(GMAIL, GMAIL_PASSWORD, DEVICE_NAME, LOCALLY)
+latitude, longitude = get_location(GMAIL, GMAIL_PASSWORD, DEVICE_NAME, HEROKU=False)
 ```
 within python.
 
