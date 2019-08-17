@@ -27,14 +27,15 @@ to install Selenium package into the appropriate env.
 
 ### HEROKU
 If the flag --HEROKU is added, the script can be run in gui-less environment like Heroku. This flag only changes the way chrome is run, that is now windowless.
-There are additional settings to be set. You need to setup an environmental variable GOOGLE_CHROME_BIN for the chromedriver parameters which adds shims after installing the following Buildpacks on Heroku:
+
+There are additional settings to be set. You need to setup an environmental variable GOOGLE_CHROME_BIN for the chromedriver parameters which adds shims, after installing the following Buildpacks on Heroku:
 1. https://github.com/heroku/heroku-buildpack-chromedriver.git
 2. https://github.com/heroku/heroku-buildpack-google-chrome.git
 
-which allows the line:
+This allows the line:
 ```
 opts.binary_location = os.environ.get("GOOGLE_CHROME_BIN", "chromedriver")
 ```
-to function. (Usually it's '/app/.apt/usr/bin/google-chrome').
+to function. (GOOGLE_CHROME_BIN is usually '/app/.apt/usr/bin/google-chrome').
 
 The setup for other gui-less env's is probably similar.
