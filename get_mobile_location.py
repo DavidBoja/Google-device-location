@@ -23,23 +23,23 @@ def start_chrome_heroku():
 
     return browser
 
-def get_location(GMAIL, GMAIL_PASSWORD, PHONE_NAME, LOCALLY=True):
+def get_location(GMAIL, GMAIL_PASSWORD, DEVICE_NAME, HEROKU=False):
     '''
     Function that uses selenium to query Google's "Find my phone" website
     to obtain your phone's location.
-    The phone name (PHONE_NAME variable) needs to be exact, as it is written
+    The phone name (DEVICE_NAME variable) needs to be exact, as it is written
     on the "Find my phone" website: https://www.google.com/android/find?did=0
     This function opens the browser. 
-    To avoid opening browsers, run the function with LOCALLY=False.
+    To avoid opening browsers, run the function with HEROKU=True.
     This is intended at gui-less servers like heroku.
     IT PRESUMES A COUPLE OF ENVIRONMENT VARIABLES.
     '''
 
     # start chrome browser and control it with selenium
-    if LOCALLY:
-        browser = start_chrome_locally()
-    else:
+    if HEROKU:
         browser = start_chrome_heroku()
+    else:
+        browser = start_chrome_locally()
 
     # Navigate to Google's page "Find your phone"
     url = 'https://www.google.com/android/find?did=0'
@@ -57,7 +57,7 @@ def get_location(GMAIL, GMAIL_PASSWORD, PHONE_NAME, LOCALLY=True):
     time.sleep(10)
 
     # click on your phone if you have multiple devices with same google account
-    your_phone = browser.find_element_by_xpath('//img[@aria-label="{}"]'.format(PHONE_NAME))
+    your_phone = browser.find_element_by_xpath('//img[@aria-label="{}"]'.format(DEVICE_NAME))
     your_phone.click()
     time.sleep(2)
 
@@ -81,6 +81,8 @@ def get_location(GMAIL, GMAIL_PASSWORD, PHONE_NAME, LOCALLY=True):
         print('Exception when trying to use selenium to get location.')
         print('Exception: {}'.format(e))
         lat, lng = 0,0
+
+    print('Your device\'s location is {}-{}'.format(lat,lng))
     
     return lat,lng
 
@@ -94,16 +96,17 @@ if __name__ == "__main__":
                                 help='Your gmail')
     parser_of_args.add_argument('GMAIL_PASSWORD',type=str,
                                 help='Your gmail password')
-    parser_of_args.add_argument('PHONE_NAME',type=str,
+    parser_of_args.add_argument('DEVICE_NAME',type=str,
                                 help='The device name you want the location for.' +
                                      'Exact device name as on the Find your phone website')
-    parser_of_args.add_argument('--LOCALLY',type=str,
+    parser_of_args.add_argument('--HEROKU',type=str,
                                 help='If you-re running the script locally or on heroku.'+
                                      'Check the function start_chrome_heroku for more info.')
     args = parser_of_args.parse_args()
 
-    if args.LOCALLY:
-        get_location(args.GMAIL, args.GMAIL_PASSWORD, args.PHONE_NAME, args.LOCALLY)
+    if args.HEROKU:
+        args.HEROKU=True
+        get_location(args.GMAIL, args.GMAIL_PASSWORD, args.DEVICE_NAME, args.HEROKU)
     else:
-        args.LOCALLY = False
-        get_location(args.GMAIL, args.GMAIL_PASSWORD, args.PHONE_NAME, args.LOCALLY)
+        args.HEROKU = False
+        get_location(args.GMAIL, args.GMAIL_PASSWORD, args.DEVICE_NAME, args.HEROKU)
